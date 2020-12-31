@@ -28,18 +28,17 @@ def upload_file(file_name):
 
 #while we download the file, our target uploads the file.
 def download_file(file_name):
-    f= open(file_name,"wb")
-    target.settimeout(1) # set timeout so that the programm doesn't crash
-    chunk = target.recv(1024)
-    while chunk:
-        f.write(chunk)
-        try:
-            chunk=target.recv(1024)
-        except socket.timeout as e:
-            break
-    target.settimeout(None)
-    f.close()
-    pass
+	f = open(file_name, 'wb')
+	target.settimeout(1)
+	chunk = target.recv(1024)
+	while chunk:
+		f.write(chunk)
+		try:
+			chunk = target.recv(1024)
+		except socket.timeout as e:
+			break
+	target.settimeout(None)
+	f.close()
 
 
 def target_communication():
