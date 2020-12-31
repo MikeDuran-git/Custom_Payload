@@ -38,7 +38,7 @@ def download_file(file_name):
         except socket.timeout as e:
             break
     target.settimeout(None)
-    f.close
+    f.close()
     pass
 
 
