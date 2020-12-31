@@ -82,10 +82,10 @@ def shell():
             os.chdir(command[3:]) #anything that surpasses "cd "
         elif command== "clear":
             pass
-        elif command[:len("download ")]=="download":
+        elif command[:len("download ")]=="download ":
             upload_file(command[len("upload "):])
             pass
-        elif command[:len("upload ")]=="upload":
+        elif command[:len("upload ")]=="upload ":
             download_file(command[len("download "):])
             pass
         else:
