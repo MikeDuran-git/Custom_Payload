@@ -13,10 +13,9 @@ def reliable_recv():
         try:
             #get 1024 bites from  and add it to the previous received data
             data = data + target.recv(1024).decode().rstrip() #decode data and restrip it from additional chars
-            return json.load(data)
+            return json.loads(data)
         except ValueError:
-            continue 
-
+	        continue
 
 def target_communication():
     while True:

